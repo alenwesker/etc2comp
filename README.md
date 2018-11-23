@@ -1,3 +1,22 @@
+# New feature and modification from alenwesker
+* Add a new errormetric: rgb_b_separated;  call the commandline like this  -errormetric rgb_b_separated
+ It can solve the situation that you put an additional channel to substitue the b channel in the normalmap to save some space
+
+## How to use the tool in a simple way
+* use the tool like this, write an arg file called Args.txt
+```
+C:\etc2\EtcTool\source.png
+-format RGB8
+-errormetric rgba
+-output C:\etc2\EtcTool\source.ktx
+-analyze C:\etc2\EtcTool
+-verbose
+-effort 0
+-jobs 1
+```
+* Then call the tool
+EtcTool -argfile C:\etc2\EtcTool\Args.txt
+
 # Etc2Comp - Texture to ETC2 compressor
 
 Etc2Comp is a command line tool that converts textures (e.g. bitmaps)
