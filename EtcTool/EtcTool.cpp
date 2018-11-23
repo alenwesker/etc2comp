@@ -17,12 +17,12 @@
 #ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS (1)
 #endif
-/*
-since this code will be used on a wide varity of platforms and configurations
-its important to have some sort of sanity check for the amount of threads that can be used.
-change this macro to suit your configuration. This will be the maximum amount of threads
-that can be created. 
-*/
+ /*
+ since this code will be used on a wide varity of platforms and configurations
+ its important to have some sort of sanity check for the amount of threads that can be used.
+ change this macro to suit your configuration. This will be the maximum amount of threads
+ that can be created.
+ */
 #define MAX_JOBS 1024
 
 #define RUN_MEM_TEST 0
@@ -67,7 +67,7 @@ class Commands
 {
 public:
 
-	static const unsigned int MIN_JOBS = 8;
+	static const unsigned int MIN_JOBS = 1;
 
 	Commands(void)
 	{
@@ -156,20 +156,20 @@ int main(int argc, const char * argv[])
 	unsigned int uiSourceWidth = sourceimage.GetWidth();
 	unsigned int uiSourceHeight = sourceimage.GetHeight();
 
-	if(commands.mipmaps != 1)
+	if (commands.mipmaps != 1)
 	{
 		int iEncodingTime_ms;
 
 		// Calculate the maximum number of possible mipmaps
 		{
-			int dim = (uiSourceWidth < uiSourceHeight)?uiSourceWidth:uiSourceHeight;
+			int dim = (uiSourceWidth < uiSourceHeight) ? uiSourceWidth : uiSourceHeight;
 			int maxMips = 0;
-			while(dim >= 1)
+			while (dim >= 1)
 			{
 				maxMips++;
 				dim >>= 1;
 			}
-			if( commands.mipmaps == 0 || commands.mipmaps > maxMips)
+			if (commands.mipmaps == 0 || commands.mipmaps > maxMips)
 			{
 				commands.mipmaps = maxMips;
 			}
@@ -204,10 +204,10 @@ int main(int argc, const char * argv[])
 			commands.format,
 			commands.mipmaps,
 			pMipmapImages,
-			uiSourceWidth, uiSourceHeight );
+			uiSourceWidth, uiSourceHeight);
 		etcfile.Write();
 
-		delete [] pMipmapImages;
+		delete[] pMipmapImages;
 	}
 	else if (USE_C_INTERFACE)
 	{
@@ -216,7 +216,7 @@ int main(int argc, const char * argv[])
 		unsigned int uiExtendedWidth;
 		unsigned int uiExtendedHeight;
 		int iEncodingTime_ms;
-		
+
 		if (commands.verboseOutput)
 		{
 			printf("Encoding:\n");
@@ -225,25 +225,25 @@ int main(int argc, const char * argv[])
 			printf("  error metric: %s\n", ErrorMetricToString(commands.e_ErrMetric));
 		}
 		Etc::Encode((float *)sourceimage.GetPixels(),
-					uiSourceWidth, uiSourceHeight,
-					commands.format,
-					commands.e_ErrMetric,
-					commands.fEffort,
-					commands.uiJobs,
-					MAX_JOBS,
-					&paucEncodingBits, &uiEncodingBitsBytes,
-					&uiExtendedWidth, &uiExtendedHeight,
-					&iEncodingTime_ms);
+			uiSourceWidth, uiSourceHeight,
+			commands.format,
+			commands.e_ErrMetric,
+			commands.fEffort,
+			commands.uiJobs,
+			MAX_JOBS,
+			&paucEncodingBits, &uiEncodingBitsBytes,
+			&uiExtendedWidth, &uiExtendedHeight,
+			&iEncodingTime_ms);
 		if (commands.verboseOutput)
 		{
 			printf("    encode time = %dms\n", iEncodingTime_ms);
 			printf("EncodedImage: %s\n", commands.pstrOutputFilename);
 		}
 		Etc::File etcfile(commands.pstrOutputFilename, Etc::File::Format::INFER_FROM_FILE_EXTENSION,
-							commands.format,
-							paucEncodingBits, uiEncodingBitsBytes,
-							uiSourceWidth, uiSourceHeight,
-							uiExtendedWidth, uiExtendedHeight);
+			commands.format,
+			paucEncodingBits, uiEncodingBitsBytes,
+			uiSourceWidth, uiSourceHeight,
+			uiExtendedWidth, uiExtendedHeight);
 		etcfile.Write();
 	}
 	else
@@ -256,12 +256,12 @@ int main(int argc, const char * argv[])
 			printf("  error metric: %s\n", ErrorMetricToString(commands.e_ErrMetric));
 		}
 		Etc::Image image((float *)sourceimage.GetPixels(),
-							uiSourceWidth, uiSourceHeight,
-							commands.e_ErrMetric);
+			uiSourceWidth, uiSourceHeight,
+			commands.e_ErrMetric);
 		image.m_bVerboseOutput = commands.verboseOutput;
 		Etc::Image::EncodingStatus encStatus = Etc::Image::EncodingStatus::SUCCESS;
-		
-		encStatus = image.Encode(commands.format, commands.e_ErrMetric, commands.fEffort, commands.uiJobs,MAX_JOBS);
+
+		encStatus = image.Encode(commands.format, commands.e_ErrMetric, commands.fEffort, commands.uiJobs, MAX_JOBS);
 		if (commands.verboseOutput)
 		{
 			printf("  encode time = %dms\n", image.GetEncodingTimeMs());
@@ -269,10 +269,10 @@ int main(int argc, const char * argv[])
 			printf("status bitfield: %u\n", encStatus);
 		}
 		Etc::File etcfile(commands.pstrOutputFilename, Etc::File::Format::INFER_FROM_FILE_EXTENSION,
-							commands.format,
-							image.GetEncodingBits(), image.GetEncodingBitsBytes(),
-							image.GetSourceWidth(), image.GetSourceHeight(),
-							image.GetExtendedWidth(), image.GetExtendedHeight());
+			commands.format,
+			image.GetEncodingBits(), image.GetEncodingBitsBytes(),
+			image.GetSourceWidth(), image.GetSourceHeight(),
+			image.GetExtendedWidth(), image.GetExtendedHeight());
 
 		etcfile.Write();
 
@@ -309,7 +309,7 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 	}
 
 	for (int iArg = 1; iArg < a_iArgs; iArg++)
-    {
+	{
 		if (DEBUG_PRINT)
 		{
 			printf("%s: %u %s\n", a_apstrArgs[0], iArg, a_apstrArgs[iArg]);
@@ -463,27 +463,27 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 		{
 			++iArg;
 
-            if (iArg >= (a_iArgs))
-            {
+			if (iArg >= (a_iArgs))
+			{
 				printf("Error: missing amount parameter for -effort\n");
 				return true;
 			}
-            else
-            {
-                float f;
-                int iScans = sscanf(a_apstrArgs[iArg], "%f", &f);
+			else
+			{
+				float f;
+				int iScans = sscanf(a_apstrArgs[iArg], "%f", &f);
 
-                if (iScans != 1)
-                {
+				if (iScans != 1)
+				{
 					printf("Error: couldn't parse amount for -effort (%s)\n", a_apstrArgs[iArg]);
 					return true;
 				}
-                else
-                {
-                    fEffort = f;
-                }
-            }
-        }
+				else
+				{
+					fEffort = f;
+				}
+			}
+		}
 		else if (strcmp(a_apstrArgs[iArg], "-errormetric") == 0)
 		{
 			++iArg;
@@ -516,6 +516,10 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 				{
 					e_ErrMetric = ErrorMetric::NORMALXYZ;
 				}
+				else if (strcmp(a_apstrArgs[iArg], "rgb_b_separated") == 0)
+				{
+					e_ErrMetric = ErrorMetric::RGB_B_SEPARATED;
+				}
 				else
 				{
 					printf("unrecognized error metric (%s), using numeric\n", a_apstrArgs[iArg]);
@@ -534,8 +538,8 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 			}
 			else
 			{
-				formatType = new char[strlen(a_apstrArgs[iArg])+1];
-				strcpy(formatType,a_apstrArgs[iArg]);
+				formatType = new char[strlen(a_apstrArgs[iArg]) + 1];
+				strcpy(formatType, a_apstrArgs[iArg]);
 				if (strcmp(a_apstrArgs[iArg], "ETC1") == 0)
 				{
 					format = Image::Format::ETC1;
@@ -593,7 +597,7 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 			return true;
 		}
 		else if (strcmp(a_apstrArgs[iArg], "-j") == 0 ||
-				 strcmp(a_apstrArgs[iArg], "-jobs") == 0)
+			strcmp(a_apstrArgs[iArg], "-jobs") == 0)
 		{
 			++iArg;
 
@@ -609,7 +613,7 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 
 				if (iScans != 1)
 				{
-					printf("Error: couldn't parse job count for %s (%s)\n", a_apstrArgs[iArg-1], a_apstrArgs[iArg]);
+					printf("Error: couldn't parse job count for %s (%s)\n", a_apstrArgs[iArg - 1], a_apstrArgs[iArg]);
 					return true;
 				}
 				else
@@ -624,7 +628,7 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 			}
 		}
 		else if (strcmp(a_apstrArgs[iArg], "-normalizexyz") == 0 ||
-				 strcmp(a_apstrArgs[iArg], "-normalizeXYZ") == 0)
+			strcmp(a_apstrArgs[iArg], "-normalizeXYZ") == 0)
 		{
 			boolNormalizeXYZ = true;
 		}
@@ -708,7 +712,7 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 			}
 			else
 			{
-				if ( 0 == strcmp(a_apstrArgs[iArg], "x") )
+				if (0 == strcmp(a_apstrArgs[iArg], "x"))
 				{
 					mipFilterFlags = Etc::FILTER_WRAP_X;
 				}
@@ -723,26 +727,26 @@ bool Commands::ProcessCommandLineArguments(int a_iArgs, const char *a_apstrArgs[
 			}
 		}
 		else if (a_apstrArgs[iArg][0] == '-')
-        {
+		{
 			printf("Error: unknown option (%s)\n", a_apstrArgs[iArg]);
 			return true;
 		}
 		else if (a_apstrArgs[iArg][0] == '\r')
-        {
+		{
 			continue;
 		}
-        else
-        {
+		else
+		{
 			if (pstrSourceFilename != nullptr)
 			{
 				printf("Error: only support one source_image (%s)\n", a_apstrArgs[iArg]);
 				return true;
 			}
 
-			pstrSourceFilename = new char[strlen(a_apstrArgs[iArg])+1];
+			pstrSourceFilename = new char[strlen(a_apstrArgs[iArg]) + 1];
 			strcpy(pstrSourceFilename, a_apstrArgs[iArg]);
-        }
-    }
+		}
+	}
 
 	if (pstrSourceFilename == nullptr)
 	{
@@ -809,25 +813,25 @@ void Commands::PrintUsageMessage(void)
 	exit(1);
 }
 
-	// ----------------------------------------------------------------------------------------------------
-	//
-	void CreateNewDir(const char *path)
-	{
-		char strCommand[300];
+// ----------------------------------------------------------------------------------------------------
+//
+void CreateNewDir(const char *path)
+{
+	char strCommand[300];
 
 #if ETC_WINDOWS
-		sprintf_s(strCommand, "if not exist %s %s %s", path, ETC_MKDIR_COMMAND, path);
+	sprintf_s(strCommand, "if not exist %s %s %s", path, ETC_MKDIR_COMMAND, path);
 #else
-		sprintf(strCommand, "%s %s", ETC_MKDIR_COMMAND, path);
+	sprintf(strCommand, "%s %s", ETC_MKDIR_COMMAND, path);
 #endif
-		int iResult = system(strCommand);
-		if (iResult != 0)
-		{
-			printf("Error: couldn't create directory (%s)\n", path);
-			exit(0);
-		}
-
+	int iResult = system(strCommand);
+	if (iResult != 0)
+	{
+		printf("Error: couldn't create directory (%s)\n", path);
+		exit(0);
 	}
 
-	// ----------------------------------------------------------------------------------------------------
-	//
+}
+
+// ----------------------------------------------------------------------------------------------------
+//

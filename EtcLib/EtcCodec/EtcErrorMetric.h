@@ -26,6 +26,7 @@ namespace Etc
 		REC709,
 		NUMERIC,
 		NORMALXYZ,
+		RGB_B_SEPARATED,
 		//
 		ERROR_METRICS,
 		//
@@ -46,6 +47,8 @@ namespace Etc
 			return "NUMERIC";
 		case NORMALXYZ:
 			return "NORMALXYZ";
+		case RGB_B_SEPARATED:
+			return "RGB_B_SEPARATED";
 		case ERROR_METRICS:
 		default:
 			return "UNKNOWN";

@@ -240,6 +240,17 @@ namespace Etc
 
 			return fDotProductError + fLength2Error + fErrorW;
 		}
+		else if (m_errormetric == ErrorMetric::RGB_B_SEPARATED)
+		{
+			assert(a_fDecodedAlpha >= 0.0f);
+
+			float fDRed = a_frgbaDecodedColor.fR - a_frgbaSourcePixel.fR;
+			float fDGreen = a_frgbaDecodedColor.fG - a_frgbaSourcePixel.fG;
+			float fDBlue = a_frgbaDecodedColor.fB - a_frgbaSourcePixel.fB;
+			float fDAlpha = a_fDecodedAlpha - a_frgbaSourcePixel.fA;
+
+			return fDRed*fDRed + fDGreen*fDGreen + fDBlue*fDBlue*16 + fDAlpha*fDAlpha;
+		}
 		else // ErrorMetric::NUMERIC
 		{
 			assert(a_fDecodedAlpha >= 0.0f);
